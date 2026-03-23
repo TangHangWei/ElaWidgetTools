@@ -214,19 +214,22 @@ void ElaPopularCardFloater::paintEvent(QPaintEvent* event)
     QString detailedText = painter.fontMetrics().elidedText(_cardPrivate->_pDetailedText, Qt::ElideRight, detailedTextRect.width() * 1.9);
     painter.drawText(detailedTextRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, detailedText);
 
-    //分割线绘制
-    painter.setPen(ElaThemeColor(_themeMode, BasicBaseLine));
-    painter.drawLine(foregroundRect.x(), detailedTextRect.bottom() + 5, foregroundRect.right(), detailedTextRect.bottom() + 5);
+    if (!_cardPrivate->_pCardFloatPixmap.isNull())
+    {
+        //分割线绘制
+        painter.setPen(ElaThemeColor(_themeMode, BasicBaseLine));
+        painter.drawLine(foregroundRect.x(), detailedTextRect.bottom() + 5, foregroundRect.right(), detailedTextRect.bottom() + 5);
 
-    //CardFloatPixmap
-    painter.drawPixmap(QRect(pixRect.x(), detailedTextRect.bottom() + 15, cardForegroundRect.bottom() + _floatGeometryOffset + 90 - detailedTextRect.bottom() - 15 - _cardPrivate->_shadowBorderWidth - 10, cardForegroundRect.bottom() + _floatGeometryOffset + 90 - detailedTextRect.bottom() - 15 - _cardPrivate->_shadowBorderWidth - 10), _cardPrivate->_pCardFloatPixmap);
+        //CardFloatPixmap
+        painter.drawPixmap(QRect(pixRect.x(), detailedTextRect.bottom() + 15, cardForegroundRect.bottom() + _floatGeometryOffset + 90 - detailedTextRect.bottom() - 15 - _cardPrivate->_shadowBorderWidth - 10, cardForegroundRect.bottom() + _floatGeometryOffset + 90 - detailedTextRect.bottom() - 15 - _cardPrivate->_shadowBorderWidth - 10), _cardPrivate->_pCardFloatPixmap);
+    }
     painter.restore();
 }
 
 QRect ElaPopularCardFloater::_calculateTargetGeometry(QRect cardGeometry)
 {
     QRect targetGeometry = cardGeometry;
-    targetGeometry.adjust(-_floatGeometryOffset, -_floatGeometryOffset, _floatGeometryOffset, 90);
+    targetGeometry.adjust(-_floatGeometryOffset, -_floatGeometryOffset, _floatGeometryOffset, _cardPrivate->_pCardFloatPixmap.isNull() ? 0 : 90);
     QRect windowRect = _cardPrivate->_pCardFloatArea->rect();
     if (targetGeometry.bottom() > windowRect.bottom())
     {
