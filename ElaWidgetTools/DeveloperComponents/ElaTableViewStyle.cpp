@@ -226,6 +226,10 @@ void ElaTableViewStyle::drawControl(ControlElement element, const QStyleOption* 
                     painter->drawRoundedRect(QRectF(itemRect.x() + 3, itemRect.y() + heightOffset, 3, itemRect.height() - 2 * heightOffset), 3, 3);
                 }
             }
+            // 网格线
+            painter->setPen(QPen(ElaThemeColor(_themeMode, BasicBaseLine), 1));
+            painter->drawLine(itemRect.bottomLeft(), itemRect.bottomRight());
+            painter->drawLine(itemRect.topRight(),   itemRect.bottomRight());
             painter->restore();
         }
         return;
